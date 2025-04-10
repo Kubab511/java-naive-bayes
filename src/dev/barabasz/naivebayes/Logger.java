@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 public class Logger {
-    private static String logname;
+    private static String logPath;
 
     public static void initLog() {
         String appDataPath = System.getenv("APPDATA");
@@ -33,7 +33,7 @@ public class Logger {
 
         try {
             if (logFile.createNewFile()) {
-                logname = logFile.getAbsolutePath();
+                logPath = logFile.getAbsolutePath();
             } else {
                 throw new IOException("Failed to create log file: " + logFile.getAbsolutePath());
             }
@@ -42,12 +42,12 @@ public class Logger {
         }
     }
 
-    public static String getLogname() {
-        return logname;
+    public static String getLogPath() {
+        return logPath;
     }
 
     public static void log(String message) {
-        try (FileWriter writer = new FileWriter(logname, true)) {
+        try (FileWriter writer = new FileWriter(logPath, true)) {
             writer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - " + message + "\n");
         } catch (IOException e) {
             throw new RuntimeException("Error writing to log file", e);

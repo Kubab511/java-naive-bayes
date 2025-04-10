@@ -85,6 +85,33 @@ public class GUI extends JFrame {
 
         add(openButton);
 
+        JButton predictButton = new JButton("Predict");
+        predictButton.addActionListener(e -> {
+            StringBuilder inputData = new StringBuilder();
+            boolean allFilled = true;
+
+            for (int i = 0; i < featureInputs.length; i++) {
+            String text = featureInputs[i].getText().trim();
+            if (text.isEmpty()) {
+                allFilled = false;
+                break;
+            }
+            inputData.append(text);
+            if (i < featureInputs.length - 1) {
+                inputData.append(",");
+            }
+            }
+
+            if (!allFilled) {
+            javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            } else {
+            String prediction = Prediction.predict(inputData.toString());
+            javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        add(predictButton);
+
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);

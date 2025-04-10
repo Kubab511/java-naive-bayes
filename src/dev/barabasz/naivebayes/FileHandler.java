@@ -31,7 +31,9 @@ public class FileHandler {
         String logFreqTable = "Frequency tables for: " + headers[4] + "\n";
         logFreqTable += headers[0] + ", " + headers[1] + ", " + headers[2] + ", " + headers[3] + "\n";
         for (Permutation permutation : permutations) {
-            logFreqTable += permutation.getData() + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";    
+            String paddedData = String.format("%-16s", permutation.getData());
+            logFreqTable += paddedData + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";
+            // logFreqTable += permutation.getData() + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";
         }
 
         Logger.log(logFreqTable);
