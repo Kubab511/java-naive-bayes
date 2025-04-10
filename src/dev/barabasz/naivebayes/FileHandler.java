@@ -22,15 +22,19 @@ public class FileHandler {
             addRow(line);
         }
 
-        String logFreqTable = "Frequency tables for: " + filePath + "\n";
+        logFrequencyTable();
+
+        bufferedReader.close();
+    }
+
+    public static void logFrequencyTable() {
+        String logFreqTable = "Frequency tables for: " + headers[4] + "\n";
         logFreqTable += headers[0] + ", " + headers[1] + ", " + headers[2] + ", " + headers[3] + "\n";
         for (Permutation permutation : permutations) {
             logFreqTable += permutation.getData() + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";    
         }
 
         Logger.log(logFreqTable);
-
-        bufferedReader.close();
     }
 
     public static void addRow(String row) {

@@ -26,6 +26,45 @@ public class GUI extends JFrame {
             add(featureInputs[i]);
         }
 
+        JButton addRowButton = new JButton("Add Row");
+        addRowButton.addActionListener(e -> {
+            JFrame addRowFrame = new JFrame("Add Row");
+            addRowFrame.setLayout(new FlowLayout());
+            addRowFrame.setSize(400, 300);
+
+            String[] headers = FileHandler.getHeaders();
+            JLabel[] inputLabels = new JLabel[headers.length];
+            javax.swing.JTextField[] inputFields = new javax.swing.JTextField[headers.length];
+
+            for (int i = 0; i < headers.length; i++) {
+                inputLabels[i] = new JLabel(headers[i] + ": ");
+                inputFields[i] = new javax.swing.JTextField(10);
+                addRowFrame.add(inputLabels[i]);
+                addRowFrame.add(inputFields[i]);
+            }
+
+            JButton addButton = new JButton("Add");
+            addButton.addActionListener(addEvent -> {
+                String rowData = "";
+                for (int i = 0; i < headers.length; i++) {
+                    if (i == headers.length - 1) {
+                        rowData += inputFields[i].getText();
+                    } else {
+                        rowData += inputFields[i].getText() + ",";
+                    }  
+                }
+                FileHandler.addRow(rowData);
+                Logger.log("Added row: " + rowData);
+                FileHandler.logFrequencyTable();
+                addRowFrame.dispose();
+            });
+
+            addRowFrame.add(addButton);
+            addRowFrame.setVisible(true);
+        });
+
+        add(addRowButton);
+
         openButton.addActionListener(e -> {
             jFileChooser = new JFileChooser();
             filter = new FileNameExtensionFilter("CSV Files", "csv");
