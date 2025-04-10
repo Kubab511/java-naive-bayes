@@ -33,7 +33,7 @@ public class GUI extends JFrame {
             int returnVal = jFileChooser.showOpenDialog(rootPane);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
-                    FileHandler.buildFrequencyTable(jFileChooser.getSelectedFile().getName());
+                    FileHandler.buildFrequencyTable(jFileChooser.getSelectedFile().getAbsolutePath());
                     String[] headers = FileHandler.getHeaders();
                     for (int i = 0; i < featureLabels.length && i < headers.length; i++) {
                         featureLabels[i].setText(headers[i] + ": ");

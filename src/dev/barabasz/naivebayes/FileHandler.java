@@ -13,6 +13,7 @@ public class FileHandler {
 
     public static void buildFrequencyTable(String filePath) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+        Logger.log("Opened file: " + filePath);
 
         String line;
         headers = bufferedReader.readLine().split(",");
@@ -20,6 +21,14 @@ public class FileHandler {
         while ((line = bufferedReader.readLine()) != null) {
             addRow(line);
         }
+
+        String logFreqTable = "Frequency tables for: " + filePath + "\n";
+        logFreqTable += headers[0] + ", " + headers[1] + ", " + headers[2] + ", " + headers[3] + "\n";
+        for (Permutation permutation : permutations) {
+            logFreqTable += permutation.getData() + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";    
+        }
+
+        Logger.log(logFreqTable);
 
         bufferedReader.close();
     }

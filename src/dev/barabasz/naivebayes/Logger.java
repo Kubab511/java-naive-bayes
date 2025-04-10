@@ -1,6 +1,7 @@
 package dev.barabasz.naivebayes;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +47,7 @@ public class Logger {
     }
 
     public static void log(String message) {
-        try (java.io.FileWriter writer = new java.io.FileWriter(logname, true)) {
+        try (FileWriter writer = new FileWriter(logname, true)) {
             writer.write(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - " + message + "\n");
         } catch (IOException e) {
             throw new RuntimeException("Error writing to log file", e);
