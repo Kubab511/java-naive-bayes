@@ -12,6 +12,7 @@ public class GUI extends JFrame {
     private JFileChooser jFileChooser;
     private FileNameExtensionFilter filter;
 
+    @SuppressWarnings("unused")
     public GUI() {
         super("Naive Bayes Classifier Calculator");
         setLayout(new FlowLayout());
@@ -45,14 +46,11 @@ public class GUI extends JFrame {
 
             JButton addButton = new JButton("Add");
             addButton.addActionListener(addEvent -> {
-                String rowData = "";
-                for (int i = 0; i < headers.length; i++) {
-                    if (i == headers.length - 1) {
-                        rowData += inputFields[i].getText();
-                    } else {
-                        rowData += inputFields[i].getText() + ",";
-                    }  
-                }
+                String rowData = String.join(",", 
+                    java.util.stream.IntStream.range(0, headers.length)
+                        .mapToObj(i -> inputFields[i].getText())
+                        .toArray(String[]::new)
+                );
                 FileHandler.addRow(rowData);
                 Logger.log("Added row: " + rowData);
                 FileHandler.logFrequencyTable();
