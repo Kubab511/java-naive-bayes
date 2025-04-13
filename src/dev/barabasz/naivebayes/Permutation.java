@@ -2,10 +2,10 @@ package dev.barabasz.naivebayes;
 
 public class Permutation {
     private String data;
-    private int yes;
-    private int no;
+    private float yes;
+    private float no;
 
-    public Permutation(String data, int yes, int no) {
+    public Permutation(String data, float yes, float no) {
         setData(data);
         setYes(yes);
         setNo(no);
@@ -19,19 +19,19 @@ public class Permutation {
         this.data = data;
     }
 
-    public int getYes() {
+    public float getYes() {
         return yes;
     }
 
-    public void setYes(int yes) {
+    public void setYes(float yes) {
         this.yes = yes;
     }
 
-    public int getNo() {
+    public float getNo() {
         return no;
     }
 
-    public void setNo(int no) {
+    public void setNo(float no) {
         this.no = no;
     }
 }
