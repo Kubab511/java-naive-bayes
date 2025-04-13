@@ -22,7 +22,6 @@ public class FileHandler {
 
         while ((line = bufferedReader.readLine()) != null) {
             addRow(line);
-
         }
 
         logFrequencyTable();
@@ -32,10 +31,12 @@ public class FileHandler {
     }
 
     public static void logFrequencyTable() {
-        String logFreqTable = "Frequency tables for: " + headers[4] + "\n";
-        logFreqTable += headers[0] + ", " + headers[1] + ", " + headers[2] + ", " + headers[3] + "\n";
+        String logFreqTable = "Frequency tables for: " + headers[headers.length-1] + "\n";
+        String freqTable = String.join(",", Arrays.copyOfRange(headers, 0, headers.length - 1));
+        logFreqTable += freqTable + "\n";
         for (Permutation permutation : permutations) {
             String paddedData = String.format("%-16s", permutation.getData());
+            logFreqTable += paddedData + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";
             logFreqTable += paddedData + " | yes: " + (int)permutation.getYes() + ", no: " + (int)permutation.getNo() + "\n";
         }
 
@@ -46,16 +47,20 @@ public class FileHandler {
         permutationExists = false;
 
         String[] tokens = row.split(",");
-        String data = String.join(",", tokens[0], tokens[1], tokens[2], tokens[3]);
+        String data = String.join(",", Arrays.stream(tokens, 0, tokens.length-1).toArray(String[]::new));
 
         for (Permutation permutation : permutations) {
             if (permutation.getData().equals(data)) {
                 if (tokens[4].equals("yes")) {
                     permutation.setYes(permutation.getYes() + 1f);
+                if (tokens[tokens.length-1].equals("yes")) {
+                    permutation.setYes(permutation.getYes() + 1);
                     permutationExists = true;
                     break;
                 } else if (tokens[4].equals("no")) {
                     permutation.setNo(permutation.getNo() + 1f);
+                } else if (tokens[tokens.length-1].equals("no")) {
+                    permutation.setNo(permutation.getNo() + 1);
                     permutationExists = true;
                     break;
                 }
