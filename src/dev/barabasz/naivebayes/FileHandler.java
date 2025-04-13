@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileHandler {
@@ -36,7 +37,6 @@ public class FileHandler {
         logFreqTable += freqTable + "\n";
         for (Permutation permutation : permutations) {
             String paddedData = String.format("%-16s", permutation.getData());
-            logFreqTable += paddedData + " | yes: " + permutation.getYes() + ", no: " + permutation.getNo() + "\n";
             logFreqTable += paddedData + " | yes: " + (int)permutation.getYes() + ", no: " + (int)permutation.getNo() + "\n";
         }
 
@@ -51,29 +51,24 @@ public class FileHandler {
 
         for (Permutation permutation : permutations) {
             if (permutation.getData().equals(data)) {
-                if (tokens[4].equals("yes")) {
-                    permutation.setYes(permutation.getYes() + 1f);
                 if (tokens[tokens.length-1].equals("yes")) {
                     permutation.setYes(permutation.getYes() + 1);
                     permutationExists = true;
                     break;
-                } else if (tokens[4].equals("no")) {
-                    permutation.setNo(permutation.getNo() + 1f);
                 } else if (tokens[tokens.length-1].equals("no")) {
                     permutation.setNo(permutation.getNo() + 1);
                     permutationExists = true;
                     break;
                 }
             }
-        }
 
-        if (!permutationExists) {
-            if (tokens[4].equals("yes")) {
-                permutations.add(new Permutation(data, 1f, 0f));
-            } else if (tokens[4].equals("no")) {
-                permutations.add(new Permutation(data, 0f, 1f));
+            if (!permutationExists) {
+                if (tokens[4].equals("yes")) {
+                    permutations.add(new Permutation(data, 1f, 0f));
+                } else if (tokens[4].equals("no")) {
+                    permutations.add(new Permutation(data, 0f, 1f));
+                }
             }
-            
         }
     }
 
