@@ -32,7 +32,7 @@ public class FileHandler {
     }
 
     public static void logFrequencyTable() {
-        String logFreqTable = "Frequency tables for: " + headers[headers.length-1] + "\n";
+        String logFreqTable = "Frequency table for: " + headers[headers.length-1] + "\n";
         String freqTable = String.join(",", Arrays.copyOfRange(headers, 0, headers.length - 1));
         logFreqTable += freqTable + "\n";
         for (Permutation permutation : permutations) {
@@ -52,15 +52,16 @@ public class FileHandler {
         for (Permutation permutation : permutations) {
             if (permutation.getData().equals(data)) {
                 if (tokens[tokens.length-1].equals("yes")) {
-                    permutation.setYes(permutation.getYes() + 1);
+                    permutation.setYes(permutation.getYes() + 1f);
                     permutationExists = true;
                     break;
                 } else if (tokens[tokens.length-1].equals("no")) {
-                    permutation.setNo(permutation.getNo() + 1);
+                    permutation.setNo(permutation.getNo() + 1f);
                     permutationExists = true;
                     break;
                 }
             }
+        }
 
             if (!permutationExists) {
                 if (tokens[4].equals("yes")) {
@@ -69,7 +70,6 @@ public class FileHandler {
                     permutations.add(new Permutation(data, 0f, 1f));
                 }
             }
-        }
     }
 
     public static List<Permutation> getPermutations() {
