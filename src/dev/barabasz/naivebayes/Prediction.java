@@ -18,4 +18,8 @@ public class Prediction {
 
         return null;
     }
+
+    public static String testData() {
+        return null;
+    }
 }

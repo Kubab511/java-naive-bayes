@@ -5,11 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class FileHandler {
     private static List<Permutation> permutations = new ArrayList<>();
     private static List<String> data = new ArrayList<>();
+    private static List<String> testData = new ArrayList<>();
+    private static List<String> trainingData = new ArrayList<>();
     private static String[] headers;
     private static boolean permutationExists;
     private static float yes;
@@ -36,7 +39,7 @@ public class FileHandler {
 
         getTestData();
 
-        buildFrequencyTable(data);
+        buildFrequencyTable(trainingData);
 
         bufferedReader.close();
     }
@@ -69,10 +72,29 @@ public class FileHandler {
         float percentageNo = no / (yes + no);
 
         // Ilość tak i nie w zbiorze danych testowych, który ma rozmiar dokładnie 1/4 danych wejściowych
-        double testYes = percentageYes * ((yes + no) * 0.25);
-        double testNo = percentageNo * ((yes + no) * 0.25);
+        int testYes = (int)(percentageYes * ((yes + no) * 0.25));
+        int testNo = (int)(percentageNo * ((yes + no) * 0.25));
 
-        Logger.log("Test data: yes: " + (int)testYes + ", no: " + (int)testNo);
+        Logger.log("Test data: yes: " + testYes + ", no: " + testNo);
+
+        // Upewnienie się, że dane są losowo wybrane
+        Collections.shuffle(data);
+
+        for (int i = 0; i < data.size(); i++) {
+            String[] tokens = data.get(i).split(",");
+            if (tokens[tokens.length-1].equals("yes") && testYes > 0) {
+                testData.add(data.get(i));
+                testYes--;
+            } else if (tokens[tokens.length-1].equals("no") && testNo > 0) {
+                testData.add(data.get(i));
+                testNo--;
+            } else {
+                trainingData.add(data.get(i));
+            }
+        }
+
+        Logger.log("Test data size: " + testData.size() + ", training data size: " + trainingData.size());
+        Logger.log("Test data: " + testData);
     }
 
     public static void addRow(String row) {
