@@ -70,7 +70,7 @@ public class GUI extends JFrame {
             int returnVal = jFileChooser.showOpenDialog(rootPane);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 try {
-                    FileHandler.buildFrequencyTable(jFileChooser.getSelectedFile().getAbsolutePath());
+                    FileHandler.readData(jFileChooser.getSelectedFile().getAbsolutePath());
                     String[] headers = FileHandler.getHeaders();
                     for (int i = 0; i < featureLabels.length && i < headers.length; i++) {
                         featureLabels[i].setText(headers[i] + ": ");
@@ -89,22 +89,24 @@ public class GUI extends JFrame {
             boolean allFilled = true;
 
             for (int i = 0; i < featureInputs.length; i++) {
-            String text = featureInputs[i].getText().trim();
-            if (text.isEmpty()) {
-                allFilled = false;
-                break;
-            }
-            inputData.append(text);
-            if (i < featureInputs.length - 1) {
-                inputData.append(",");
-            }
+                String text = featureInputs[i].getText().trim();
+                if (text.isEmpty()) {
+                    allFilled = false;
+                    break;
+                }
+
+                inputData.append(text);
+
+                if (i < featureInputs.length - 1) {
+                    inputData.append(",");
+                }
             }
 
             if (!allFilled) {
-            javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             } else {
-            String prediction = Prediction.predict(inputData.toString());
-            javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                String prediction = Prediction.predict(inputData.toString());
+                javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

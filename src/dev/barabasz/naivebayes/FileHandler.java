@@ -9,26 +9,46 @@ import java.util.List;
 
 public class FileHandler {
     private static List<Permutation> permutations = new ArrayList<>();
+    private static List<String> data = new ArrayList<>();
     private static String[] headers;
     private static boolean permutationExists;
-    private static int yes = 0;
-    private static int no = 0;
+    private static float yes;
+    private static float no;
 
-    public static void buildFrequencyTable(String filePath) throws IOException {
+    public static void readData(String filePath) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
         Logger.log("Opened file: " + filePath);
-
         String line;
+
         headers = bufferedReader.readLine().split(",");
 
         while ((line = bufferedReader.readLine()) != null) {
-            addRow(line);
+            data.add(line);
+            if (line.split(",")[line.split(",").length - 1].equals("yes")) {
+                yes += 1f;
+            } else {
+                no += 1f;
+            }
+        }
+
+        Logger.log("Read file: " + filePath + ", lines: " + data.size());
+        Logger.log("yes: " + yes + ", no: " + no);
+
+        getTestData();
+
+        buildFrequencyTable(data);
+
+        bufferedReader.close();
+    }
+
+    private static void buildFrequencyTable(List<String> data) {
+        Logger.log("Building frequency table");
+
+        for (int i = 0; i < data.size(); i++) {
+            addRow(data.get(i));
         }
 
         logFrequencyTable();
-        getTotalRows();
-
-        bufferedReader.close();
     }
 
     public static void logFrequencyTable() {
@@ -41,6 +61,18 @@ public class FileHandler {
         }
 
         Logger.log(logFreqTable);
+    }
+
+    private static void getTestData() {
+        // Procent tak i nie
+        float percentageYes = yes / (yes + no);
+        float percentageNo = no / (yes + no);
+
+        // Ilość tak i nie w zbiorze danych testowych, który ma rozmiar dokładnie 1/4 danych wejściowych
+        double testYes = percentageYes * ((yes + no) * 0.25);
+        double testNo = percentageNo * ((yes + no) * 0.25);
+
+        Logger.log("Test data: yes: " + (int)testYes + ", no: " + (int)testNo);
     }
 
     public static void addRow(String row) {
@@ -63,13 +95,13 @@ public class FileHandler {
             }
         }
 
-            if (!permutationExists) {
-                if (tokens[4].equals("yes")) {
-                    permutations.add(new Permutation(data, 1f, 0f));
-                } else if (tokens[4].equals("no")) {
-                    permutations.add(new Permutation(data, 0f, 1f));
-                }
+        if (!permutationExists) {
+            if (tokens[4].equals("yes")) {
+                permutations.add(new Permutation(data, 1f, 0f));
+            } else if (tokens[4].equals("no")) {
+                permutations.add(new Permutation(data, 0f, 1f));
             }
+        }
     }
 
     public static List<Permutation> getPermutations() {
@@ -78,19 +110,5 @@ public class FileHandler {
 
     public static String[] getHeaders() {
         return headers;
-    }
-
-    private static void getTotalRows() {
-        for (Permutation permutation : FileHandler.permutations) {
-            yes += permutation.getYes();
-            no += permutation.getNo();
-        }
-
-        Logger.log("Total rows: yes: " + yes + ", no: " + no);
-        Logger.log("Total rows: " + (yes + no));
-    }
-
-    public static void getTrainingData() {
-
     }
 }
