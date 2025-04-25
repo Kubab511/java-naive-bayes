@@ -15,19 +15,37 @@ public class GUI extends JFrame {
     @SuppressWarnings("unused")
     public GUI() {
         super("Naive Bayes Classifier Calculator");
-        setLayout(new FlowLayout());
+        // setLayout(new FlowLayout());
 
         JButton openButton = new JButton("Open File");
         JLabel[] featureLabels = new JLabel[4];
         javax.swing.JTextField[] featureInputs = new javax.swing.JTextField[4];
+        setLayout(null); // Use absolute positioning
+
         for (int i = 0; i < 4; i++) {
             featureLabels[i] = new JLabel("feature " + (i + 1) + ": ");
-            featureInputs[i] = new javax.swing.JTextField(10);
+            featureLabels[i].setBounds(20, 20 + (i * 40), 150, 30); // Position labels
             add(featureLabels[i]);
+
+            featureInputs[i] = new javax.swing.JTextField(10);
+            featureInputs[i].setBounds(130, 20 + (i * 40), 200, 30); // Position inputs to the right of labels
             add(featureInputs[i]);
         }
 
         JButton addRowButton = new JButton("Add Row");
+        JButton predictButton = new JButton("Predict");
+        JButton testButton = new JButton("Test Data");
+
+        openButton.setBounds(25, 200, 100, 30);
+        addRowButton.setBounds(135, 200, 100, 30);
+        predictButton.setBounds(245, 200, 100, 30);
+        testButton.setBounds(355, 200, 100, 30);
+
+        add(openButton);
+        add(addRowButton);
+        add(predictButton);
+        add(testButton);
+
         addRowButton.addActionListener(e -> {
             JFrame addRowFrame = new JFrame("Add Row");
             addRowFrame.setLayout(new FlowLayout());
@@ -38,30 +56,28 @@ public class GUI extends JFrame {
             javax.swing.JTextField[] inputFields = new javax.swing.JTextField[headers.length];
 
             for (int i = 0; i < headers.length; i++) {
-                inputLabels[i] = new JLabel(headers[i] + ": ");
-                inputFields[i] = new javax.swing.JTextField(10);
-                addRowFrame.add(inputLabels[i]);
-                addRowFrame.add(inputFields[i]);
+            inputLabels[i] = new JLabel(headers[i] + ": ");
+            inputFields[i] = new javax.swing.JTextField(10);
+            addRowFrame.add(inputLabels[i]);
+            addRowFrame.add(inputFields[i]);
             }
 
             JButton addButton = new JButton("Add");
             addButton.addActionListener(addEvent -> {
-                String rowData = String.join(",", 
-                    java.util.stream.IntStream.range(0, headers.length)
-                        .mapToObj(i -> inputFields[i].getText())
-                        .toArray(String[]::new)
-                );
-                FileHandler.addRow(rowData);
-                Logger.log("Added row: " + rowData);
-                FileHandler.logFrequencyTable();
-                addRowFrame.dispose();
+            String rowData = String.join(",", 
+                java.util.stream.IntStream.range(0, headers.length)
+                .mapToObj(i -> inputFields[i].getText())
+                .toArray(String[]::new)
+            );
+            FileHandler.addRow(rowData);
+            Logger.log("Added row: " + rowData);
+            FileHandler.logFrequencyTable();
+            addRowFrame.dispose();
             });
 
             addRowFrame.add(addButton);
             addRowFrame.setVisible(true);
         });
-
-        add(addRowButton);
 
         openButton.addActionListener(e -> {
             jFileChooser = new JFileChooser();
@@ -69,50 +85,44 @@ public class GUI extends JFrame {
             jFileChooser.setFileFilter(filter);
             int returnVal = jFileChooser.showOpenDialog(rootPane);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                try {
-                    FileHandler.readData(jFileChooser.getSelectedFile().getAbsolutePath());
-                    String[] headers = FileHandler.getHeaders();
-                    for (int i = 0; i < featureLabels.length && i < headers.length; i++) {
-                        featureLabels[i].setText(headers[i] + ": ");
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+            try {
+                FileHandler.readData(jFileChooser.getSelectedFile().getAbsolutePath());
+                String[] headers = FileHandler.getHeaders();
+                for (int i = 0; i < featureLabels.length && i < headers.length; i++) {
+                featureLabels[i].setText(headers[i] + ": ");
                 }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             }
         });
 
-        add(openButton);
-
-        JButton predictButton = new JButton("Predict");
         predictButton.addActionListener(e -> {
             StringBuilder inputData = new StringBuilder();
             boolean allFilled = true;
 
             for (int i = 0; i < featureInputs.length; i++) {
-                String text = featureInputs[i].getText().trim();
-                if (text.isEmpty()) {
-                    allFilled = false;
-                    break;
-                }
+            String text = featureInputs[i].getText().trim();
+            if (text.isEmpty()) {
+                allFilled = false;
+                break;
+            }
 
-                inputData.append(text);
+            inputData.append(text);
 
-                if (i < featureInputs.length - 1) {
-                    inputData.append(",");
-                }
+            if (i < featureInputs.length - 1) {
+                inputData.append(",");
+            }
             }
 
             if (!allFilled) {
-                javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             } else {
-                String prediction = Prediction.predict(inputData.toString());
-                javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            String prediction = Prediction.predict(inputData.toString());
+            javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
-        add(predictButton);
-
-        JButton testButton = new JButton("Test Data");
         testButton.addActionListener(e -> {
             try {
             float result = Prediction.testData();
@@ -123,8 +133,7 @@ public class GUI extends JFrame {
             }
         });
 
-        add(testButton);
-
+        setResizable(false);
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
