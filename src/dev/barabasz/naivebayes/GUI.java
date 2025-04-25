@@ -112,6 +112,19 @@ public class GUI extends JFrame {
 
         add(predictButton);
 
+        JButton testButton = new JButton("Test Data");
+        testButton.addActionListener(e -> {
+            try {
+            float result = Prediction.testData();
+            javax.swing.JOptionPane.showMessageDialog(this, "Test Result: " + result, "Test Data Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while testing data: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+            }
+        });
+
+        add(testButton);
+
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);

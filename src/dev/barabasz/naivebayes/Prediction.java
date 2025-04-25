@@ -1,5 +1,7 @@
 package dev.barabasz.naivebayes;
 
+import java.util.Arrays;
+
 public class Prediction {
     public static String predict(String data) {
         for (Permutation permutation : FileHandler.getPermutations()) {
@@ -19,7 +21,31 @@ public class Prediction {
         return null;
     }
 
-    public static String testData() {
-        return null;
+    // zwraca procent poprawnych prognoz
+    public static float testData() {
+        float total = FileHandler.getTestData().size();
+        float correct = 0f;
+        for (String row : FileHandler.getTestData()) {
+            String[] tokens = row.split(",");
+            String data = String.join(",", Arrays.copyOf(tokens, tokens.length - 1));
+
+            for (Permutation permutation : FileHandler.getPermutations()) {
+                if (permutation.getData().equals(data)) {
+                    if (permutation.getYes() >= permutation.getNo()) {
+                        if (tokens[tokens.length - 1].strip().equals("yes")) {
+                            correct += 1f;
+                            Logger.log("correct, yes");
+                        }
+                    } else {
+                        if (tokens[tokens.length - 1].strip().equals("no")) {
+                            correct += 1f;
+                            Logger.log("correct, no");
+                        }
+                    }
+                }
+            }
+        }
+
+        return (correct/total) * 100f;
     }
 }

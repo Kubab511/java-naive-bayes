@@ -37,7 +37,7 @@ public class FileHandler {
         Logger.log("Read file: " + filePath + ", lines: " + data.size());
         Logger.log("yes: " + yes + ", no: " + no);
 
-        getTestData();
+        buildData();
 
         buildFrequencyTable(trainingData);
 
@@ -66,7 +66,7 @@ public class FileHandler {
         Logger.log(logFreqTable);
     }
 
-    private static void getTestData() {
+    private static void buildData() {
         // Procent tak i nie
         float percentageYes = yes / (yes + no);
         float percentageNo = no / (yes + no);
@@ -128,6 +128,10 @@ public class FileHandler {
 
     public static List<Permutation> getPermutations() {
         return permutations;
+    }
+
+    public static List<String> getTestData() {
+        return testData;
     }
 
     public static String[] getHeaders() {
