@@ -8,6 +8,40 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.FlowLayout;
 import java.io.IOException;
 
+/**
+ * The GUI class represents the graphical user interface for the Naive Bayes Classifier Calculator.
+ * It extends the JFrame class and provides functionality for interacting with the application,
+ * including loading data, adding rows, making predictions, and testing data accuracy.
+ * 
+ * Features:
+ * - Allows users to load a CSV file containing data.
+ * - Dynamically updates feature labels based on the loaded data headers.
+ * - Provides input fields for entering feature values for prediction.
+ * - Enables users to add new rows of data to the dataset.
+ * - Displays prediction results based on the entered feature values.
+ * - Tests the accuracy of the classifier on the dataset.
+ * 
+ * Components:
+ * - Buttons for opening files, adding rows, making predictions, and testing data.
+ * - Labels and text fields for displaying and entering feature values.
+ * - Dialogs for displaying results and error messages.
+ * 
+ * Dependencies:
+ * - FileHandler: Handles file operations such as reading data, adding rows, and logging frequency tables.
+ * - Prediction: Provides methods for making predictions and testing data accuracy.
+ * - Logger: Logs application events and actions.
+ * 
+ * Usage:
+ * - Instantiate the GUI class to launch the application.
+ * - Interact with the buttons and input fields to perform various operations.
+ * 
+ * Note:
+ * - Ensure that the FileHandler and Prediction classes are implemented and accessible.
+ * - The application expects CSV files with appropriate headers for feature labels.
+ * 
+ * @author Jakub Barabasz - c23310371
+ * @version 1.0.0
+ */
 public class GUI extends JFrame {
     private JFileChooser jFileChooser;
     private FileNameExtensionFilter filter;
@@ -125,7 +159,7 @@ public class GUI extends JFrame {
         testButton.addActionListener(e -> {
             try {
                 float result = Prediction.testData();
-                javax.swing.JOptionPane.showMessageDialog(this, "Test Result: " + result, "Test Data Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                javax.swing.JOptionPane.showMessageDialog(this, "Test Result: " + String.format("%.2f", result) + "% of the predictions were correct.", "Test Data Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while testing data: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();

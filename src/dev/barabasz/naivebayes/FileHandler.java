@@ -8,6 +8,37 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The FileHandler class is responsible for handling file operations and data processing
+ * for a Naive Bayes classifier. It reads data from a CSV file, splits it into training
+ * and test datasets, and builds a frequency table for the classifier.
+ * 
+ * <p>Key functionalities include:
+ * <ul>
+ *   <li>Reading data from a file and parsing it into a list of strings.</li>
+ *   <li>Splitting the data into training and test datasets based on a 75-25% ratio.</li>
+ *   <li>Building a frequency table for permutations of data attributes.</li>
+ *   <li>Logging the frequency table and other relevant information.</li>
+ * </ul>
+ * 
+ * <p>Dependencies:
+ * <ul>
+ *   <li>Logger: Used for logging messages and debugging information.</li>
+ *   <li>Permutation: Represents a combination of data attributes and their frequency counts.</li>
+ * </ul>
+ * 
+ * <p>Usage:
+ * <pre>
+ * {@code
+ * FileHandler.readData("path/to/data.csv");
+ * List<Permutation> permutations = FileHandler.getPermutations();
+ * List<String> testData = FileHandler.getTestData();
+ * }
+ * </pre>
+ *
+ * @author Jakub Barabasz - c23310371
+ * @version 1.0.0
+ */
 public class FileHandler {
     private static List<Permutation> permutations = new ArrayList<>();
     private static List<String> data = new ArrayList<>();
@@ -25,6 +56,7 @@ public class FileHandler {
 
         headers = bufferedReader.readLine().split(",");
 
+        // Read input file line by line, count total yes and no and populate the data List
         while ((line = bufferedReader.readLine()) != null) {
             data.add(line);
             if (line.split(",")[line.split(",").length - 1].equals("yes")) {
@@ -67,17 +99,16 @@ public class FileHandler {
     }
 
     private static void buildData() {
-        // Procent tak i nie
         float percentageYes = yes / (yes + no);
         float percentageNo = no / (yes + no);
 
-        // Ilość tak i nie w zbiorze danych testowych, który ma rozmiar dokładnie 1/4 danych wejściowych
+        // Count how many yes and no permutations need to go into the test data which is 1/4 of the total data given
         int testYes = (int)(percentageYes * ((yes + no) * 0.25));
         int testNo = (int)(percentageNo * ((yes + no) * 0.25));
 
         Logger.log("Test data: yes: " + testYes + ", no: " + testNo);
 
-        // Upewnienie się, że dane są losowo wybrane
+        // Shuffle the data to randomize which permutations are chosen (this may slightly change individual percentages in the frequency table as different rows are chosen each time)
         Collections.shuffle(data);
 
         for (int i = 0; i < data.size(); i++) {

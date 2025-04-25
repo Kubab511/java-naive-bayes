@@ -2,6 +2,28 @@ package dev.barabasz.naivebayes;
 
 import java.util.Arrays;
 
+/**
+ * The {@code Prediction} class provides functionality for making predictions based on the data loaded using the FileHandler class.
+ * 
+ * <p>Usage:
+ * <ul>
+ *   <li>Call {@link #predict(String)} to generate a prediction based on the data inputted.</li>
+ *   <li>Use {@link #testData()} to run a test of the classifier and see how accurate it is.</li>
+ * </ul>
+ * 
+ * 
+ * <p>Example:
+ * <pre>
+ * {@code
+ * Prediction.predict(data);
+ * Prediction.testData();
+ * }
+ * </pre>
+ * 
+ * @author Jakub Barabasz - c23310371
+ * @version 1.0.0
+ */
+
 public class Prediction {
     public static String predict(String data) {
         for (Permutation permutation : FileHandler.getPermutations()) {
@@ -21,7 +43,6 @@ public class Prediction {
         return null;
     }
 
-    // zwraca procent poprawnych prognoz
     public static float testData() {
         float total = FileHandler.getTestData().size();
         float correct = 0f;
