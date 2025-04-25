@@ -15,20 +15,19 @@ public class GUI extends JFrame {
     @SuppressWarnings("unused")
     public GUI() {
         super("Naive Bayes Classifier Calculator");
-        // setLayout(new FlowLayout());
 
         JButton openButton = new JButton("Open File");
         JLabel[] featureLabels = new JLabel[4];
         javax.swing.JTextField[] featureInputs = new javax.swing.JTextField[4];
-        setLayout(null); // Use absolute positioning
+        setLayout(null);
 
         for (int i = 0; i < 4; i++) {
             featureLabels[i] = new JLabel("feature " + (i + 1) + ": ");
-            featureLabels[i].setBounds(20, 20 + (i * 40), 150, 30); // Position labels
+            featureLabels[i].setBounds(20, 20 + (i * 40), 150, 30);
             add(featureLabels[i]);
 
             featureInputs[i] = new javax.swing.JTextField(10);
-            featureInputs[i].setBounds(130, 20 + (i * 40), 200, 30); // Position inputs to the right of labels
+            featureInputs[i].setBounds(130, 20 + (i * 40), 200, 30);
             add(featureInputs[i]);
         }
 
@@ -56,23 +55,23 @@ public class GUI extends JFrame {
             javax.swing.JTextField[] inputFields = new javax.swing.JTextField[headers.length];
 
             for (int i = 0; i < headers.length; i++) {
-            inputLabels[i] = new JLabel(headers[i] + ": ");
-            inputFields[i] = new javax.swing.JTextField(10);
-            addRowFrame.add(inputLabels[i]);
-            addRowFrame.add(inputFields[i]);
+                inputLabels[i] = new JLabel(headers[i] + ": ");
+                inputFields[i] = new javax.swing.JTextField(10);
+                addRowFrame.add(inputLabels[i]);
+                addRowFrame.add(inputFields[i]);
             }
 
             JButton addButton = new JButton("Add");
             addButton.addActionListener(addEvent -> {
-            String rowData = String.join(",", 
-                java.util.stream.IntStream.range(0, headers.length)
-                .mapToObj(i -> inputFields[i].getText())
-                .toArray(String[]::new)
-            );
-            FileHandler.addRow(rowData);
-            Logger.log("Added row: " + rowData);
-            FileHandler.logFrequencyTable();
-            addRowFrame.dispose();
+                String rowData = String.join(",", 
+                    java.util.stream.IntStream.range(0, headers.length)
+                    .mapToObj(i -> inputFields[i].getText())
+                    .toArray(String[]::new)
+                );
+                FileHandler.addRow(rowData);
+                Logger.log("Added row: " + rowData);
+                FileHandler.logFrequencyTable();
+                addRowFrame.dispose();
             });
 
             addRowFrame.add(addButton);
@@ -89,7 +88,7 @@ public class GUI extends JFrame {
                 FileHandler.readData(jFileChooser.getSelectedFile().getAbsolutePath());
                 String[] headers = FileHandler.getHeaders();
                 for (int i = 0; i < featureLabels.length && i < headers.length; i++) {
-                featureLabels[i].setText(headers[i] + ": ");
+                    featureLabels[i].setText(headers[i] + ": ");
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -116,19 +115,19 @@ public class GUI extends JFrame {
             }
 
             if (!allFilled) {
-            javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             } else {
-            String prediction = Prediction.predict(inputData.toString());
-            javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                String prediction = Prediction.predict(inputData.toString());
+                javax.swing.JOptionPane.showMessageDialog(this, "Prediction: " + prediction, "Prediction Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
         testButton.addActionListener(e -> {
             try {
-            float result = Prediction.testData();
-            javax.swing.JOptionPane.showMessageDialog(this, "Test Result: " + result, "Test Data Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                float result = Prediction.testData();
+                javax.swing.JOptionPane.showMessageDialog(this, "Test Result: " + result, "Test Data Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while testing data: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while testing data: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             }
         });
