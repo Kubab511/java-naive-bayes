@@ -1,18 +1,58 @@
-## Getting Started
+# Java Naive Bayes Predictor
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Overview
+This is a Java-based GUI application designed to load a CSV file containing permutations of data. The application uses the Naive Bayes algorithm to predict the output when the user inputs their own permutation.
 
-## Folder Structure
+## Features
+- Load and parse CSV files with data permutations.
+- User-friendly GUI for data input and interaction.
+- Predict outcomes based on user-provided permutations using the Naive Bayes algorithm.
 
-The workspace contains two folders by default, where:
+## Prerequisites
+- Java Development Kit (JDK) 8 or higher.
+- A CSV file with properly formatted data for training.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Installation
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/Kubab511/java-naive-bayes.git
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd java-naive-bayes
+    ```
+3. Compile the project:
+    ```bash
+    javac -d bin src/App.java
+    ```
+4. Run the application:
+    ```bash
+    java -cp bin Main
+    ```
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+## Usage
+1. Launch the application.
+2. Load a CSV file containing training data.
+3. Input your own permutation in the provided fields.
+4. Click the "Predict" button to see the predicted output.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## CSV Format
+The CSV file should have the following structure:
+- Each row represents a data permutation.
+- The last column should contain the expected output (label).
 
-## Dependency Management
+Example:
+```
+Feature1,Feature2,Feature3,Feature4,Output
+Yes,No,Yes,Yes,Yes
+No,No,Yes,No,No
+```
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Technologies Used
+- Java Swing for the GUI.
+
+## License
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgments
+- Java Swing Documentation
