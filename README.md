@@ -29,6 +29,10 @@ This is a Java-based GUI application designed to load a CSV file containing perm
     ```bash
     java -cp bin Main
     ```
+5. (Optional) Generate a frequency table
+    ```bash
+    python frequency_table.py
+    ```
 
 ## Usage
 1. Launch the application.
