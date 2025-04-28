@@ -1,7 +1,19 @@
-import pandas as pd
+import csv
+from collections import defaultdict
 
-data = pd.read_csv("predictive_dataset.csv")
+permutation_counts = defaultdict(lambda: {"yes": 0, "no": 0})
 
-freq_table = data.value_counts().reset_index(name="Frequency")
+with open('./predictive_dataset.csv', mode='r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        if len(row) != 5:
+            continue
+        permutation = tuple(row[:4])
+        result = row[4].strip().lower()
+        if result in ["yes", "no"]:
+            permutation_counts[permutation][result] += 1
 
-print(freq_table)
+print(f"{'Permutation':<20} {'Yes':<5} {'No':<5}")
+print("-" * 50)
+for permutation, counts in permutation_counts.items():
+    print(f"{','.join(permutation):<20} {counts['yes']:<5} {counts['no']:<5}")
