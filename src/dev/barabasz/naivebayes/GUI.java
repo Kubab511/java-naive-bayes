@@ -57,11 +57,11 @@ public class GUI extends JFrame {
 
         for (int i = 0; i < 4; i++) {
             featureLabels[i] = new JLabel("feature " + (i + 1) + ": ");
-            featureLabels[i].setBounds(20, 20 + (i * 40), 150, 30);
+            featureLabels[i].setBounds(20, 20 + (i * 40), 140, 30);
             add(featureLabels[i]);
 
             featureInputs[i] = new javax.swing.JTextField(10);
-            featureInputs[i].setBounds(130, 20 + (i * 40), 200, 30);
+            featureInputs[i].setBounds(145, 20 + (i * 40), 200, 30);
             add(featureInputs[i]);
         }
 
@@ -80,36 +80,45 @@ public class GUI extends JFrame {
         add(testButton);
 
         addRowButton.addActionListener(e -> {
-            JFrame addRowFrame = new JFrame("Add Row");
-            addRowFrame.setLayout(new FlowLayout());
-            addRowFrame.setSize(400, 300);
+            try {
+                JFrame addRowFrame = new JFrame("Add Row");
+                addRowFrame.setLayout(new FlowLayout());
+                addRowFrame.setSize(400, 300);
+    
+                String[] headers = FileHandler.getHeaders();
+                JLabel[] inputLabels = new JLabel[headers.length];
+                javax.swing.JTextField[] inputFields = new javax.swing.JTextField[headers.length];
+    
+                for (int i = 0; i < headers.length; i++) {
+                    inputLabels[i] = new JLabel(headers[i] + ": ");
+                    inputFields[i] = new javax.swing.JTextField(10);
+                    addRowFrame.add(inputLabels[i]);
+                    addRowFrame.add(inputFields[i]);
+                }
 
-            String[] headers = FileHandler.getHeaders();
-            JLabel[] inputLabels = new JLabel[headers.length];
-            javax.swing.JTextField[] inputFields = new javax.swing.JTextField[headers.length];
+                JButton addButton = new JButton("Add");
+                addButton.addActionListener(addEvent -> {
+                    try {
+                        String rowData = String.join(",", 
+                            java.util.stream.IntStream.range(0, headers.length)
+                            .mapToObj(i -> inputFields[i].getText())
+                            .toArray(String[]::new)
+                        );
+                        FileHandler.addRow(rowData);
+                        Logger.log("Added row: " + rowData);
+                        FileHandler.logFrequencyTable();
+                    } catch (Exception ex) {
+                        javax.swing.JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    addRowFrame.dispose();
+                });
 
-            for (int i = 0; i < headers.length; i++) {
-                inputLabels[i] = new JLabel(headers[i] + ": ");
-                inputFields[i] = new javax.swing.JTextField(10);
-                addRowFrame.add(inputLabels[i]);
-                addRowFrame.add(inputFields[i]);
+                addRowFrame.add(addButton);
+                addRowFrame.setVisible(true);
+            } catch (Exception ex) {
+                javax.swing.JOptionPane.showMessageDialog(this, "You must load data before adding rows to it.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
-
-            JButton addButton = new JButton("Add");
-            addButton.addActionListener(addEvent -> {
-                String rowData = String.join(",", 
-                    java.util.stream.IntStream.range(0, headers.length)
-                    .mapToObj(i -> inputFields[i].getText())
-                    .toArray(String[]::new)
-                );
-                FileHandler.addRow(rowData);
-                Logger.log("Added row: " + rowData);
-                FileHandler.logFrequencyTable();
-                addRowFrame.dispose();
-            });
-
-            addRowFrame.add(addButton);
-            addRowFrame.setVisible(true);
         });
 
         openButton.addActionListener(e -> {
@@ -135,17 +144,17 @@ public class GUI extends JFrame {
             boolean allFilled = true;
 
             for (int i = 0; i < featureInputs.length; i++) {
-            String text = featureInputs[i].getText().trim();
-            if (text.isEmpty()) {
-                allFilled = false;
-                break;
-            }
+                String text = featureInputs[i].getText().trim();
+                if (text.isEmpty()) {
+                    allFilled = false;
+                    break;
+                }
 
-            inputData.append(text);
+                inputData.append(text);
 
-            if (i < featureInputs.length - 1) {
-                inputData.append(",");
-            }
+                if (i < featureInputs.length - 1) {
+                    inputData.append(",");
+                }
             }
 
             if (!allFilled) {
@@ -158,11 +167,15 @@ public class GUI extends JFrame {
 
         testButton.addActionListener(e -> {
             try {
+                if (FileHandler.getPermutations().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "No data loaded.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 float result = Prediction.testData();
                 javax.swing.JOptionPane.showMessageDialog(this, "Test Result: " + String.format("%.2f", result) + "% of the predictions were correct.", "Test Data Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "An error occurred while testing data: " + ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+                ex.printStackTrace();
             }
         });
 
