@@ -31,11 +31,11 @@ public class Prediction {
                 if (permutation.getYes() >= permutation.getNo()) {
                     float confidence = ((float) permutation.getYes() / ((float) permutation.getNo() + (float) permutation.getYes()) * 100);
                     Logger.log(data + " | yes | " + confidence);
-                    return "Yes, with a confidence of: " + String.format("%.5f", confidence) + "%";
+                    return "Yes, with a confidence of: " + String.format("%.2f", confidence) + "%";
                 } else {
                     float confidence = ((float) permutation.getNo() / ((float) permutation.getYes() + (float) permutation.getNo()) * 100);
                     Logger.log(data + " | no | " + confidence);
-                    return "No, with a confidence of: " + String.format("%.5f", confidence) + "%";
+                    return "No, with a confidence of: " + String.format("%.2f", confidence) + "%";
                 }
             }
         }

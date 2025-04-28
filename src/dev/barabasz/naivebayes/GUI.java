@@ -5,7 +5,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.FlowLayout;
 import java.io.IOException;
 
 /**
@@ -82,7 +81,7 @@ public class GUI extends JFrame {
         addRowButton.addActionListener(e -> {
             try {
                 JFrame addRowFrame = new JFrame("Add Row");
-                addRowFrame.setLayout(new FlowLayout());
+                addRowFrame.setLayout(null);
                 addRowFrame.setSize(400, 300);
     
                 String[] headers = FileHandler.getHeaders();
@@ -91,12 +90,15 @@ public class GUI extends JFrame {
     
                 for (int i = 0; i < headers.length; i++) {
                     inputLabels[i] = new JLabel(headers[i] + ": ");
+                    inputLabels[i].setBounds(20, 20 + (i * 40), 140, 30);
                     inputFields[i] = new javax.swing.JTextField(10);
+                    inputFields[i].setBounds(145, 20 + (i * 40), 200, 30);
                     addRowFrame.add(inputLabels[i]);
                     addRowFrame.add(inputFields[i]);
                 }
 
                 JButton addButton = new JButton("Add");
+                addButton.setBounds(150, 220, 100, 30);
                 addButton.addActionListener(addEvent -> {
                     try {
                         String rowData = String.join(",", 
@@ -116,6 +118,7 @@ public class GUI extends JFrame {
 
                 addRowFrame.add(addButton);
                 addRowFrame.setVisible(true);
+                addRowFrame.setResizable(false);
             } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "You must load data before adding rows to it.", "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
